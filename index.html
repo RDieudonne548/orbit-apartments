@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orbit Apartments | Premium Living</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <nav class="container">
+
+
+
+          <div class="logo">
+    <a href="#" onclick="goBack()">
+        <img src="logo.png" alt="Orbit Solutions" id="company-logo" style="height: 80px;">
+    </a>
+</div>
+
+
+
+
+            <ul class="nav-links">
+                <li><a href="#" onclick="goBack()">Home</a></li>
+                <li><a href="#">Support</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Premium accommodation with Orbit Solutions Ltd.</h1>
+            <p>Providing quality living apartment in Rwanda.</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <section id="location-selection">
+            <div class="location-card" onclick="showLocation('GISHUSHU')">
+                <h2>GISHUSHU</h2>
+                <p>10 Units Available</p>
+            </div>
+            <div class="location-card" onclick="showLocation('MUHIMA')">
+                <h2>MUHIMA</h2>
+                <p>6 Units Available</p>
+            </div>
+            <div class="location-card" onclick="showLocation('NYABISINDU')">
+                <h2>NYABISINDU</h2>
+                <p>7 Units Available</p>
+            </div>
+        </section>
+
+        <section id="apartments-section" style="display:none; padding-bottom: 50px;">
+            <button onclick="goBack()" class="btn-back">← CHANGE LOCATION</button>
+            <h2 id="location-title"></h2>
+            <div id="apartment-grid"></div>
+        </section>
+    </div>
+
+    <div id="details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 apartment | Managed by Orbit Solutions Ltd.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
