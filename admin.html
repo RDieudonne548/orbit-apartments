@@ -66,7 +66,21 @@
             });
         }
 
-        window.onload = loadAdminData;
+        async function checkPassword() {
+    const pin = prompt("Enter Admin PIN to view bookings:");
+    
+    // Choose your own PIN here (e.g., '2026')
+    if (pin === "2020") {
+        alert("Access Granted");
+        loadAdminData(); // This only runs if the password is correct
+    } else {
+        alert("Incorrect PIN. Access Denied.");
+        window.location.href = "index.html"; // Redirects intruders back to the home page
+    }
+}
+
+// Run the password check as soon as the page loads
+window.onload = checkPassword;
     </script>
 </body>
 </html>
