@@ -182,7 +182,7 @@ function startPayment(totalAmount) {
         tx_ref: "ORB-" + Date.now(),
         amount: totalAmount, // This is now the dynamic total
         currency: "RWF",
-        payment_options: "card, mobilemoneyrwanda",
+        payment_options: "card, mobilemoneyrwanda, barter, payattitude",
         customer: {
             email: document.getElementById('clientEmail').value,
             phone_number: document.getElementById('clientPhone').value,
