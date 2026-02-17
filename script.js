@@ -1,109 +1,244 @@
-// 1. WhatsApp Config
-const myWhatsAppNumber = "250780000000"; 
+// 1. INITIALIZE SUPABASE
+const supabaseUrl = 'https://iecgjcoftzrchbgiowxf.supabase.co';
+const supabaseKey = 'sb_publishable_lwFsYrS1Fk6IDEg7HG8qdw_cvKk5PRo'; 
+const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-// 2. Full Database: 23 Units (15 Booked / 8 Available) - All with 3 Photos
-const apartmentData = [
-    // --- GISHUSHU (10 UNITS) ---
-    { id: 1, name: "Gishushu Room 01", price: "150,000 RWF", status: "Booked", bookedUntil: "2026-03-15", location: "GISHUSHU", mainImage: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800", gallery: ["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200","https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200","https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=1200"] },
-    { id: 2, name: "Gishushu Room 02", price: "150,000 RWF", status: "Booked", bookedUntil: "2026-04-01", location: "GISHUSHU", mainImage: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800", gallery: ["https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200","https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200","https://images.unsplash.com/photo-1554995207-c18c203602cb?w=1200"] },
-    { id: 3, name: "Gishushu Room 03", price: "140,000 RWF", status: "Available", bookedUntil: "", location: "GISHUSHU", mainImage: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800", gallery: ["https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200","https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200","https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200"] },
-    { id: 4, name: "Gishushu Room 04", price: "140,000 RWF", status: "Booked", bookedUntil: "2026-02-28", location: "GISHUSHU", mainImage: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800", gallery: ["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200","https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=1200","https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200"] },
-    { id: 5, name: "Gishushu Room 05", price: "130,000 RWF", status: "Booked", bookedUntil: "2026-05-10", location: "GISHUSHU", mainImage: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800", gallery: ["https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200","https://images.unsplash.com/photo-1554995207-c18c203602cb?w=1200","https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200"] },
-    { id: 6, name: "Gishushu Room 06", price: "130,000 RWF", status: "Available", bookedUntil: "", location: "GISHUSHU", mainImage: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800", gallery: ["https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200","https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200","https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200"] },
-    { id: 7, name: "Gishushu Room 07", price: "125,000 RWF", status: "Booked", bookedUntil: "2026-03-01", location: "GISHUSHU", mainImage: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800", gallery: ["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200","https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=1200","https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200"] },
-    { id: 8, name: "Gishushu Room 08", price: "125,000 RWF", status: "Booked", bookedUntil: "2026-06-20", location: "GISHUSHU", mainImage: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800", gallery: ["https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200","https://images.unsplash.com/photo-1554995207-c18c203602cb?w=1200","https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200"] },
-    { id: 9, name: "Gishushu Room 09", price: "120,000 RWF", status: "Available", bookedUntil: "", location: "GISHUSHU", mainImage: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800", gallery: ["https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200","https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200","https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200"] },
-    { id: 10, name: "Gishushu Room 10", price: "120,000 RWF", status: "Booked", bookedUntil: "2026-03-25", location: "GISHUSHU", mainImage: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800", gallery: ["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200","https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=1200","https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200"] },
+// 2. IMAGE DATABASE (23 Rooms - 3 Images Each)
+// Ensure these names match your Supabase "room_name" column EXACTLY.
+const roomImages = {
+    // GISHUSHU (10 Rooms)
+    "Gishushu Room 01": ["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600", "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=600", "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600"],
+    "Gishushu Room 02": ["https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600", "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=600", "https://images.unsplash.com/photo-1554995207-c18c203602cb?w=600"],
+    "Gishushu Room 03": ["https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=600", "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600", "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600"],
+    "Gishushu Room 04": ["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600", "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600", "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=600"],
+    "Gishushu Room 05": ["https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600", "https://images.unsplash.com/photo-1554995207-c18c203602cb?w=600", "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=600"],
+    "Gishushu Room 06": ["https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=600", "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600", "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600"],
+    "Gishushu Room 07": ["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600", "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600", "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=600"],
+    "Gishushu Room 08": ["https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600", "https://images.unsplash.com/photo-1554995207-c18c203602cb?w=600", "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=600"],
+    "Gishushu Room 09": ["https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=600", "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600", "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600"],
+    "Gishushu Room 10": ["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600", "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600", "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=600"],
 
-    // --- MUHIMA (6 UNITS) ---
-    { id: 11, name: "Muhima Studio A1", price: "80,000 RWF", status: "Booked", bookedUntil: "2026-04-12", location: "MUHIMA", mainImage: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800", gallery: ["https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200","https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200","https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200"] },
-    { id: 12, name: "Muhima Studio A2", price: "80,000 RWF", status: "Booked", bookedUntil: "2026-03-10", location: "MUHIMA", mainImage: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800", gallery: ["https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200","https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200","https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200"] },
-    { id: 13, name: "Muhima Studio A3", price: "85,000 RWF", status: "Available", bookedUntil: "", location: "MUHIMA", mainImage: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800", gallery: ["https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200","https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200","https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200"] },
-    { id: 14, name: "Muhima Studio A4", price: "85,000 RWF", status: "Booked", bookedUntil: "2026-02-20", location: "MUHIMA", mainImage: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800", gallery: ["https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200","https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200","https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200"] },
-    { id: 15, name: "Muhima Studio A5", price: "90,000 RWF", status: "Booked", bookedUntil: "2026-05-01", location: "MUHIMA", mainImage: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800", gallery: ["https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200","https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200","https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200"] },
-    { id: 16, name: "Muhima Studio A6", price: "90,000 RWF", status: "Available", bookedUntil: "", location: "MUHIMA", mainImage: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800", gallery: ["https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200","https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200","https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200"] },
+    // MUHIMA (6 Rooms)
+    "Muhima Studio A1": ["https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=600", "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600", "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600"],
+    "Muhima Studio A2": ["https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=600", "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600", "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600"],
+    "Muhima Studio A3": ["https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=600", "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600", "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600"],
+    "Muhima Studio A4": ["https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=600", "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600", "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600"],
+    "Muhima Studio A5": ["https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=600", "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600", "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600"],
+    "Muhima Studio A6": ["https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=600", "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600", "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600"],
 
-    // --- NYABISINDU (7 UNITS) ---
-    { id: 17, name: "Nyabisindu Unit G1", price: "100,000 RWF", status: "Booked", bookedUntil: "2026-03-30", location: "NYABISINDU", mainImage: "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800", gallery: ["https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200","https://images.unsplash.com/photo-1554995207-c18c203602cb?w=1200","https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=1200"] },
-    { id: 18, name: "Nyabisindu Unit G2", price: "100,000 RWF", status: "Booked", bookedUntil: "2026-04-15", location: "NYABISINDU", mainImage: "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800", gallery: ["https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200","https://images.unsplash.com/photo-1554995207-c18c203602cb?w=1200","https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=1200"] },
-    { id: 19, name: "Nyabisindu Unit G3", price: "100,000 RWF", status: "Available", bookedUntil: "", location: "NYABISINDU", mainImage: "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800", gallery: ["https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200","https://images.unsplash.com/photo-1554995207-c18c203602cb?w=1200","https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=1200"] },
-    { id: 20, name: "Nyabisindu Unit G4", price: "110,000 RWF", status: "Booked", bookedUntil: "2026-02-25", location: "NYABISINDU", mainImage: "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800", gallery: ["https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200","https://images.unsplash.com/photo-1554995207-c18c203602cb?w=1200","https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=1200"] },
-    { id: 21, name: "Nyabisindu Unit G5", price: "110,000 RWF", status: "Available", bookedUntil: "", location: "NYABISINDU", mainImage: "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800", gallery: ["https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200","https://images.unsplash.com/photo-1554995207-c18c203602cb?w=1200","https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=1200"] },
-    { id: 22, name: "Nyabisindu Unit G6", price: "115,000 RWF", status: "Booked", bookedUntil: "2026-05-20", location: "NYABISINDU", mainImage: "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800", gallery: ["https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200","https://images.unsplash.com/photo-1554995207-c18c203602cb?w=1200","https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=1200"] },
-    { id: 23, name: "Nyabisindu Unit G7", price: "115,000 RWF", status: "Available", bookedUntil: "", location: "NYABISINDU", mainImage: "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800", gallery: ["https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200","https://images.unsplash.com/photo-1554995207-c18c203602cb?w=1200","https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=1200"] }
-];
+    // NYABISINDU (7 Rooms)
+    "Nyabisindu Unit G1": ["https://images.unsplash.com/photo-1484154218962-a197022b5858?w=600", "https://images.unsplash.com/photo-1554995207-c18c203602cb?w=600", "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600"],
+    "Nyabisindu Unit G2": ["https://images.unsplash.com/photo-1484154218962-a197022b5858?w=600", "https://images.unsplash.com/photo-1554995207-c18c203602cb?w=600", "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600"],
+    "Nyabisindu Unit G3": ["https://images.unsplash.com/photo-1484154218962-a197022b5858?w=600", "https://images.unsplash.com/photo-1554995207-c18c203602cb?w=600", "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600"],
+    "Nyabisindu Unit G4": ["https://images.unsplash.com/photo-1484154218962-a197022b5858?w=600", "https://images.unsplash.com/photo-1554995207-c18c203602cb?w=600", "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600"],
+    "Nyabisindu Unit G5": ["https://images.unsplash.com/photo-1484154218962-a197022b5858?w=600", "https://images.unsplash.com/photo-1554995207-c18c203602cb?w=600", "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600"],
+    "Nyabisindu Unit G6": ["https://images.unsplash.com/photo-1484154218962-a197022b5858?w=600", "https://images.unsplash.com/photo-1554995207-c18c203602cb?w=600", "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600"],
+    "Nyabisindu Unit G7": ["https://images.unsplash.com/photo-1484154218962-a197022b5858?w=600", "https://images.unsplash.com/photo-1554995207-c18c203602cb?w=600", "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600"]
+};
 
-function sendWhatsApp(roomName) {
-    const msg = encodeURIComponent(`Hello StayNest! I am interested in booking: ${roomName}.`);
-    window.open(`https://wa.me/${myWhatsAppNumber}?text=${msg}`, '_blank');
-}
-
-function showLocation(area) {
+// 3. FETCH DATA & DISPLAY
+async function showLocation(area) {
     document.getElementById('location-selection').style.display = 'none';
     document.getElementById('apartments-section').style.display = 'block';
-    document.getElementById('location-title').innerText = area + " UNITS";
+    document.getElementById('location-title').innerText = "LOADING " + area + "...";
+    
     const grid = document.getElementById('apartment-grid');
     grid.innerHTML = '';
 
-    const today = new Date();
-    today.setHours(0,0,0,0);
+    // 1. Fetch Rooms
+    const { data: liveRooms, error: roomError } = await _supabase
+        .from('rooms')
+        .select('*')
+        .eq('location', area)
+        .order('room_name', { ascending: true });
 
-    const filtered = apartmentData.filter(r => r.location === area);
+    // 2. Fetch ALL Paid Bookings
+    const { data: paidBookings, error: bookingError } = await _supabase
+        .from('bookings')
+        .select('room_name, status, check_in_date, check_out_date')
+        .eq('status', 'Paid');
 
-    filtered.forEach(room => {
-        let currentStatus = room.status;
-        let checkOut = room.bookedUntil ? new Date(room.bookedUntil) : null;
+    if (roomError || bookingError) {
+        grid.innerHTML = '<p>Error loading data.</p>';
+        return;
+    }
+
+    document.getElementById('location-title').innerText = area + " UNITS";
+
+    // Get today's date in YYYY-MM-DD format
+    const today = new Date().toISOString().split('T')[0];
+
+    liveRooms.forEach(room => {
+        // FIND IF THERE IS AN ACTIVE BOOKING TODAY
+        const activeBooking = paidBookings ? paidBookings.find(b => 
+            b.room_name === room.room_name && 
+            today >= b.check_in_date && 
+            today <= b.check_out_date
+        ) : null;
+
+        const isOccupied = !!activeBooking;
         
-        if (currentStatus === "Booked" && checkOut && today > checkOut) {
-            currentStatus = "Available";
-        }
-
-        const statusLabel = currentStatus === 'Booked' ? `Occupied until: ${room.bookedUntil}` : 'Available Now';
-        
-        // Button changed to "Book Now" and logic removed
-        const bookBtn = currentStatus === 'Booked' ? 
-            `<button class="btn-primary" style="background:#ccc; cursor:not-allowed;" disabled>Already Booked</button>` :
-            `<button class="btn-primary" style="cursor: default;">Book Now</button>`;
+        const photos = roomImages[room.room_name] || ["https://via.placeholder.com/600x400"];
+        const formattedPrice = Number(room.price).toLocaleString();
 
         grid.innerHTML += `
             <div class="room-card">
-                <div class="img-container">
-                    <img src="${room.mainImage}" alt="${room.name}">
-                </div>
+                <img src="${photos[0]}" style="width:100%; height:200px; object-fit:cover; border-radius:10px;">
                 <div class="card-content">
-                    <div>
-                        <h3 style="margin: 0 0 10px 0;">${room.name}</h3>
-                        <p style="color: var(--primary-green); font-weight: 800; font-size: 1.3rem; margin-bottom: 5px;">${room.price}</p>
-                        <p>Status: <span class="status ${currentStatus.toLowerCase()}">${currentStatus}</span></p>
-                        <p style="font-size: 14px; color: #777; margin-top: 5px;">${statusLabel}</p>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <h3>${room.room_name}</h3>
+                        <span style="font-weight:bold; color:#2ecc71;">${formattedPrice} RWF</span>
                     </div>
-                    <div style="margin-top: 20px;">
-                        <button onclick="openModal(${room.id})" class="btn-secondary">📷 VIEW GALLERY</button>
-                        ${bookBtn}
+                    <p>Status: <span class="status ${isOccupied ? 'booked' : 'available'}">
+                        ${isOccupied ? 'Occupied until ' + activeBooking.check_out_date : 'Available'}
+                    </span></p>
+                    <div style="margin-top: 15px; display: flex; gap: 10px;">
+                        <button onclick="openGallery('${room.room_name}')" class="btn-secondary" style="flex:1;">📷 GALLERY</button>
+                        <button onclick="openBookingForm('${room.room_name}', ${room.price})" 
+                                class="btn-primary" 
+                                ${isOccupied ? 'disabled style="background:#ccc; cursor:not-allowed;"' : ''}>
+                            ${isOccupied ? 'Book Now' : 'Book Now'}
+                        </button>
                     </div>
                 </div>
             </div>`;
     });
 }
 
-function openModal(roomId) {
-    const room = apartmentData.find(r => r.id === roomId);
+
+function calculateNights(cin, cout) {
+    const start = new Date(cin);
+    const end = new Date(cout);
+    const diffTime = Math.abs(end - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    return diffDays > 0 ? diffDays : 1; // Minimum 1 night
+}
+// 4. MODALS & FORMS
+function openGallery(roomName) {
+    const photos = roomImages[roomName] || [];
     document.getElementById('modal-body').innerHTML = `
-        <h2 style="margin-top:0; color:var(--primary-blue);">${room.name}</h2>
-        <p style="color: var(--primary-green); font-weight: bold; font-size: 1.2rem;">Price: ${room.price}</p>
-        <div class="gallery-grid">
-            ${room.gallery.map(img => `<img src="${img}" style="width:100%; border-radius:10px; margin-bottom:15px;">`).join('')}
-        </div>
-        <div style="text-align:center; padding: 20px 0;">
-            <button class="btn-primary" style="width: auto; padding: 15px 60px; cursor: default;">Book Now</button>
+        <h2 style="margin-bottom:20px;">${roomName} Gallery</h2>
+        <div style="display: grid; gap: 15px;">
+            ${photos.map(img => `<img src="${img}" style="width:100%; border-radius:8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">`).join('')}
         </div>`;
     document.getElementById('details-modal').style.display = "block";
 }
 
 function closeModal() { document.getElementById('details-modal').style.display = "none"; }
+
+let currentRoomPrice = 0; // This creates a "memory" for the price
+
+function openBookingForm(roomName, price) {
+    currentRoomPrice = price; // Remember the price of the room clicked
+    document.getElementById('bookingModal').style.display = 'flex';
+    document.getElementById('selectedRoomDisplay').innerText = "Booking: " + roomName;
+}
+
+function closeBookingModal() { document.getElementById('bookingModal').style.display = 'none'; }
+
+
+// 5. BOOKING & PAYMENT LOGIC
+let selectedRoomName = "";
+let selectedRoomPrice = 0;
+
+function openBookingForm(roomName, price) {
+    selectedRoomName = roomName;
+    selectedRoomPrice = price;
+    document.getElementById('selectedRoomDisplay').innerText = "Booking: " + roomName;
+    document.getElementById('bookingModal').style.display = 'flex';
+    
+    // Set minimum date to today so users can't book the past
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('checkInDate').setAttribute('min', today);
+    document.getElementById('checkOutDate').setAttribute('min', today);
+}
+
+function closeBookingModal() { 
+    document.getElementById('bookingModal').style.display = 'none'; 
+}
+
+    document.getElementById('reservationForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const cin = document.getElementById('checkInDate').value;
+    const cout = document.getElementById('checkOutDate').value;
+
+    if (cout <= cin) {
+        alert("Check-out date must be after the Check-in date.");
+        return;
+    }
+
+    const nights = calculateNights(cin, cout);
+    const totalAmount = selectedRoomPrice * nights;
+
+    // This calls the payment immediately without the extra popup
+    startPayment(totalAmount);
+});
+   
+
+function startPayment(totalAmount) {
+    FlutterwaveCheckout({
+        public_key: "FLWPUBK_TEST-1d19c96c271334b1bb6397336f0053ca-X",
+        tx_ref: "ORB-" + Date.now(),
+        amount: totalAmount, // This is now the dynamic total
+        currency: "RWF",
+        payment_options: "card, mobilemoneyrwanda",
+        customer: {
+            email: document.getElementById('clientEmail').value,
+            phone_number: document.getElementById('clientPhone').value,
+            name: document.getElementById('clientName').value,
+        },
+        callback: async function (data) {
+            if (data.status === "successful") {
+                const { error } = await _supabase
+                    .from('bookings')
+                    .insert([{
+                        client_name: document.getElementById('clientName').value,
+                        client_phone: document.getElementById('clientPhone').value,
+                        room_name: selectedRoomName,
+                        check_in_date: document.getElementById('checkInDate').value,
+                        check_out_date: document.getElementById('checkOutDate').value,
+                        status: 'Paid',
+                        amount_paid: totalAmount // Save the total paid
+                    }]);
+
+                if (!error) {
+                    alert("Payment Successful! Room is now reserved.");
+                    location.reload(); // Refresh to show "Occupied" status
+                } else {
+                    console.error("Supabase Error:", error.message);
+                    alert("Payment received, but database sync failed. Please contact support.");
+                }
+            }
+        },
+        onclose: function() {
+            console.log("Payment window closed");
+        }
+    });
+}
+
+['checkInDate', 'checkOutDate'].forEach(id => {
+    const element = document.getElementById(id);
+    if (element) {
+        element.addEventListener('change', () => {
+            const cin = document.getElementById('checkInDate').value;
+            const cout = document.getElementById('checkOutDate').value;
+            const display = document.getElementById('totalPriceDisplay');
+
+            if (cin && cout && cout > cin) {
+                const nights = calculateNights(cin, cout);
+                if (display) {
+                    display.innerText = `Total: ${(selectedRoomPrice * nights).toLocaleString()} RWF (${nights} nights)`;
+                }
+            } else if (display) {
+                display.innerText = ""; // Clear if dates are invalid
+            }
+        });
+    }
+});
 function goBack() { 
     document.getElementById('location-selection').style.display = 'grid';
     document.getElementById('apartments-section').style.display = 'none';
 }
+
 window.onload = goBack;
-window.onclick = function(e) { if(e.target == document.getElementById('details-modal')) closeModal(); }

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Orbit Admin | Booking Management</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #2c3e50; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        .status-tag { padding: 5px 10px; border-radius: 4px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Orbit Solutions Admin Dashboard</h1>
+        <button onclick="window.location.href='index.html'" class="btn-back">← BACK TO SITE</button>
+        
+        <table id="admin-table">
+            <thead>
+                <tr>
+                    <th>Room Name</th>
+                    <th>Client Name</th>
+                    <th>Phone</th>
+                    <th>Check-in</th>
+                    <th>Check-out</th>
+                    <th>Total Paid</th>
+                </tr>
+            </thead>
+            <tbody id="admin-body">
+                </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Use your existing Supabase credentials
+        const _supabase = supabase.createClient('https://iecgjcoftzrchbgiowxf.supabase.co', 'sb_publishable_lwFsYrS1Fk6IDEg7HG8qdw_cvKk5PRo');
+
+        async function loadAdminData() {
+            const { data, error } = await _supabase
+                .from('bookings')
+                .select('*')
+                .order('check_in_date', { ascending: false });
+
+            if (error) {
+                console.error(error);
+                return;
+            }
+
+            const body = document.getElementById('admin-body');
+            body.innerHTML = '';
+
+            data.forEach(booking => {
+                body.innerHTML += `
+                    <tr>
+                        <td><strong>${booking.room_name}</strong></td>
+                        <td>${booking.client_name}</td>
+                        <td>${booking.client_phone}</td>
+                        <td>${booking.check_in_date}</td>
+                        <td>${booking.check_out_date}</td>
+                        <td style="color: #2ecc71; font-weight: bold;">${Number(booking.amount_paid).toLocaleString()} RWF</td>
+                    </tr>
+                `;
+            });
+        }
+
+        window.onload = loadAdminData;
+    </script>
+</body>
+</html>
