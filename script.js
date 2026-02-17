@@ -2,6 +2,7 @@
 const supabaseUrl = 'https://iecgjcoftzrchbgiowxf.supabase.co';
 const supabaseKey = 'sb_publishable_lwFsYrS1Fk6IDEg7HG8qdw_cvKk5PRo'; 
 const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+let roomsCache = {}; 
 
 // 2. IMAGE DATABASE (23 Rooms - 3 Images Each)
 // Ensure these names match your Supabase "room_name" column EXACTLY.
@@ -38,49 +39,64 @@ const roomImages = {
 
 // 3. FETCH DATA & DISPLAY
 async function showLocation(area) {
-    document.getElementById('location-selection').style.display = 'none';
-    document.getElementById('apartments-section').style.display = 'block';
-    document.getElementById('location-title').innerText = "LOADING " + area + "...";
-    
     const grid = document.getElementById('apartment-grid');
-    grid.innerHTML = '';
+    const selection = document.getElementById('location-selection');
+    const section = document.getElementById('apartments-section');
+    const title = document.getElementById('location-title');
 
-    // 1. Fetch Rooms
-    const { data: liveRooms, error: roomError } = await _supabase
-        .from('rooms')
-        .select('*')
-        .eq('location', area)
-        .order('room_name', { ascending: true });
+    // STEP A: Switch screens IMMEDIATELY
+    selection.style.display = 'none';
+    section.style.display = 'block';
+    title.innerText = area + " UNITS";
 
-    // 2. Fetch ALL Paid Bookings
-    const { data: paidBookings, error: bookingError } = await _supabase
-        .from('bookings')
-        .select('room_name, status, check_in_date, check_out_date')
-        .eq('status', 'Paid');
-
-    if (roomError || bookingError) {
-        grid.innerHTML = '<p>Error loading data.</p>';
-        return;
+    // STEP B: Check if we already have these rooms in memory
+    if (roomsCache[area]) {
+        // If yes, show them instantly!
+        renderRoomGrid(roomsCache[area], grid);
+    } else {
+        // If first time, show a quick loader inside the grid area only
+        grid.innerHTML = '<p style="text-align:center; width:100%;">Loading rooms...</p>';
     }
 
-    document.getElementById('location-title').innerText = area + " UNITS";
+    // STEP C: Fetch fresh data from Supabase in the background
+    try {
+        const { data: liveRooms, error: roomError } = await _supabase
+            .from('rooms')
+            .select('*')
+            .eq('location', area)
+            .order('room_name', { ascending: true });
 
-    // Get today's date in YYYY-MM-DD format
-    const today = new Date().toISOString().split('T')[0];
+        const { data: paidBookings, error: bookingError } = await _supabase
+            .from('bookings')
+            .select('room_name, status, check_in_date, check_out_date')
+            .eq('status', 'Paid');
 
-    liveRooms.forEach(room => {
-        // FIND IF THERE IS AN ACTIVE BOOKING TODAY
-        const activeBooking = paidBookings ? paidBookings.find(b => 
-            b.room_name === room.room_name && 
-            today >= b.check_in_date && 
-            today <= b.check_out_date
-        ) : null;
+        if (!roomError && !bookingError) {
+            // Process the data to include "Occupied" status
+            const processedRooms = liveRooms.map(room => {
+                const today = new Date().toISOString().split('T')[0];
+                const activeBooking = paidBookings?.find(b => 
+                    b.room_name === room.room_name && today >= b.check_in_date && today <= b.check_out_date
+                );
+                return { ...room, activeBooking, isOccupied: !!activeBooking };
+            });
 
-        const isOccupied = !!activeBooking;
-        
+            // Save to cache and update the screen
+            roomsCache[area] = processedRooms;
+            renderRoomGrid(processedRooms, grid);
+        }
+    } catch (e) {
+        console.error("Cache Update Error:", e);
+    }
+}
+
+// Helper function to draw the rooms on the screen
+function renderRoomGrid(rooms, grid) {
+    grid.innerHTML = '';
+    rooms.forEach(room => {
         const photos = roomImages[room.room_name] || ["https://via.placeholder.com/600x400"];
         const formattedPrice = Number(room.price).toLocaleString();
-
+        
         grid.innerHTML += `
             <div class="room-card">
                 <img src="${photos[0]}" style="width:100%; height:200px; object-fit:cover; border-radius:10px;">
@@ -89,22 +105,21 @@ async function showLocation(area) {
                         <h3>${room.room_name}</h3>
                         <span style="font-weight:bold; color:#2ecc71;">${formattedPrice} RWF</span>
                     </div>
-                    <p>Status: <span class="status ${isOccupied ? 'booked' : 'available'}">
-                        ${isOccupied ? 'Occupied until ' + activeBooking.check_out_date : 'Available'}
+                    <p>Status: <span class="status ${room.isOccupied ? 'booked' : 'available'}">
+                        ${room.isOccupied ? 'Occupied until ' + room.activeBooking.check_out_date : 'Available'}
                     </span></p>
                     <div style="margin-top: 15px; display: flex; gap: 10px;">
                         <button onclick="openGallery('${room.room_name}')" class="btn-secondary" style="flex:1;">📷 GALLERY</button>
                         <button onclick="openBookingForm('${room.room_name}', ${room.price})" 
                                 class="btn-primary" 
-                                ${isOccupied ? 'disabled style="background:#ccc; cursor:not-allowed;"' : ''}>
-                            ${isOccupied ? 'Book Now' : 'Book Now'}
+                                ${room.isOccupied ? 'disabled style="background:#ccc; cursor:not-allowed;"' : ''}>
+                            Book Now
                         </button>
                     </div>
                 </div>
             </div>`;
     });
 }
-
 
 function calculateNights(cin, cout) {
     const start = new Date(cin);
